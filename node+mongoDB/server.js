@@ -2,6 +2,18 @@ const express = require('express');
 const app = express();
 app.use(express.urlencoded({extended: true})) 
 
+const { MongoClient } = require('mongodb');
+const dbUri = 'mongodb+srv://${process.env.DB_USER}:${processs.env.DB_PASSWORD}@${process.env.DB_HOST}/?retryWrites=true&w=majority'
+const client = new MongoClient(dbUri);
+async function run() {
+  try {
+    console.log("Connected successfully to server");
+  } finally {
+    await client.close();
+  }
+}
+run().catch(console.dir);
+
 app.listen(9090, function(){
     console.log('listening on 9090')    
 });
