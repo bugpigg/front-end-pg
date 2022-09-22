@@ -1,18 +1,20 @@
+// Load configuration from .env
+require('dotenv').config({ path: './.env'});
+
+// Load express 
 const express = require('express');
 const app = express();
-app.use(express.urlencoded({extended: true})) 
 
+// Get MongoDB connection
 const { MongoClient } = require('mongodb');
-const dbUri = 'mongodb+srv://${process.env.DB_USER}:${processs.env.DB_PASSWORD}@${process.env.DB_HOST}/?retryWrites=true&w=majority'
+const dbUri = process.env.ATLAS_URI;
 const client = new MongoClient(dbUri);
-async function run() {
-  try {
-    console.log("Connected successfully to server");
-  } finally {
-    await client.close();
-  }
-}
-run().catch(console.dir);
+
+app.use(express.urlencoded({extended: true}));
+app.set('view engine', 'ejs');
+
+const db = client.db('todoapp');
+const post = db.collection('post');
 
 app.listen(9090, function(){
     console.log('listening on 9090')    
@@ -34,8 +36,22 @@ app.get('/write', function(request, response) {
     response.sendFile(__dirname + '/write.html')
 });
 
-app.post('/add', function(request,response){
-    console.log(request.body.title);
-    console.log(request.body.date);
-    response.send('전송완료');
+app.post('/add', async function(request,response){
+  post.insertOne(
+      {제목: request.body.title, 날짜: request.body.date}
+    )
+    .then(
+      res => console.log('done!'),
+      err => console.error(`something went wrong: ${err}`)
+    );
+    response.send('전송완료') 
+});
+
+app.get('/list', async function(request, response){
+  const result = await post.find({}).toArray()
+  console.log(result)
+  response.render("list.ejs", {
+    posts: result,
+    error: false
+  });
 })
