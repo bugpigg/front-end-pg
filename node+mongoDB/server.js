@@ -161,3 +161,20 @@ passport.deserializeUser(async function(아이디, done){
   const result = await login.findOne({id: 아이디})
   done(null, result)
 })
+
+app.get('/search', async (request, response) => {
+  var searchCondition = [
+    {
+      $search: {
+        index: 'titleSearch',
+        text: {
+          query: request.query.value,
+          path: '제목'
+        }
+      }
+    }
+  ] 
+  const result = await post.aggregate(searchCondition).toArray()
+  console.log(result)
+  response.render('search.ejs', {posts: result})
+})
