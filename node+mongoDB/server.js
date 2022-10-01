@@ -4,6 +4,7 @@ require('dotenv').config({ path: './.env'});
 // Load express 
 const express = require('express');
 const app = express();
+const methodOverride = require('method-override')
 
 // Get MongoDB connection
 const { MongoClient } = require('mongodb');
@@ -13,6 +14,8 @@ const client = new MongoClient(dbUri);
 app.use(express.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
+app.use(methodOverride('_method'))
+
 
 const db = client.db('todoapp');
 const post = db.collection('post');
@@ -74,4 +77,20 @@ app.delete('/delete', function(request,response){
 app.get('/detail/:id', async function(request, response){
   const result = await post.findOne({ _id : parseInt(request.params.id) });
   response.render('detail.ejs', { data : result })
+})
+
+app.get('/edit/:id', async function(request, response) {
+  const result = await post.findOne({ _id : parseInt(request.params.id) });
+  response.render('edit.ejs',{ post : result } )
+})
+
+app.put('/edit', function(request, response){
+  post.updateOne({ _id: parseInt(request.body.id) }, {$set:{제목: request.body.title , 날짜: request.body.date }})
+  .then(
+    res => {
+      console.log('done!!')
+      response.redirect('/list')
+    },
+    err => console.error(`something went wrong: ${err}`)
+  );
 })
