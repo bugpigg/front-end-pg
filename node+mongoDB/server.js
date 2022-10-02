@@ -34,23 +34,6 @@ app.get('/write', function (request, response) {
   response.render("write.ejs")
 });
 
-app.post('/add', async function (request, response) {
-  const result = await counter.findOne({ name: '게시물갯수' })
-  post.insertOne(
-    { _id: result.totalPost + 1, 제목: request.body.title, 날짜: request.body.date }
-  )
-    .then(
-      res => console.log('done!'),
-      err => console.error(`something went wrong: ${err}`)
-    );
-  counter.updateOne({ name: '게시물갯수' }, { $inc: { totalPost: 1 } }) // operator 활용
-    .then(
-      res => console.log('done!!'),
-      err => console.error(`something went wrong: ${err}`)
-    );
-  response.send('전송완료')
-});
-
 app.get('/list', async function (request, response) {
   const result = await post.find({}).toArray()
   console.log(result)
@@ -58,21 +41,6 @@ app.get('/list', async function (request, response) {
     posts: result,
     error: false
   });
-})
-
-app.delete('/delete', function (request, response) {
-  request.body._id = parseInt(request.body._id)
-  post.deleteOne(request.body)
-    .then(
-      res => {
-        console.log('Delete done!!')
-        res.status(200).send({ message: '성공했습니다!' })
-      },
-      err => {
-        console.error(`something went wrong: ${err}`)
-        res.status(400).send({ message: '실패했습니다!' })
-      }
-    )
 })
 
 app.get('/detail/:id', async function (request, response) {
@@ -127,7 +95,6 @@ function checkLogin(request,response,next){
   }
 } // 이게 바로 미들웨어이다
 
-
 passport.use(
   new LocalStrategy({
     usernameField: 'id',
@@ -162,6 +129,39 @@ passport.deserializeUser(async function(아이디, done){
   done(null, result)
 })
 
+app.post('/add', async function (request, response) {
+  const result = await counter.findOne({ name: '게시물갯수' })
+  post.insertOne(
+    { _id: result.totalPost + 1, 제목: request.body.title, 날짜: request.body.date, 작성자: request.user._id }
+  )
+    .then(
+      res => console.log('done!'),
+      err => console.error(`something went wrong: ${err}`)
+    );
+  counter.updateOne({ name: '게시물갯수' }, { $inc: { totalPost: 1 } }) // operator 활용
+    .then(
+      res => console.log('done!!'),
+      err => console.error(`something went wrong: ${err}`)
+    );
+  response.send('전송완료')
+});
+
+app.delete('/delete', function (request, response) {
+  var toDelete = {_id: parseInt(request.body._id), 작성자: request.user._id}
+  console.log(toDelete)
+  post.deleteOne(toDelete)
+    .then(
+      res => {
+        console.log('Delete done!!')
+        response.status(200).send({ message: '성공했습니다!' })
+      },
+      err => {
+        console.error(`something went wrong: ${err}`)
+        response.status(400).send({ message: '실패했습니다!' })
+      }
+    )
+})
+
 app.get('/search', async (request, response) => {
   var searchCondition = [
     {
@@ -177,4 +177,15 @@ app.get('/search', async (request, response) => {
   const result = await post.aggregate(searchCondition).toArray()
   console.log(result)
   response.render('search.ejs', {posts: result})
+})
+
+app.post('/register', function(request, response){
+  login.insertOne({
+    id: request.body.id,
+    pw: request.body.pw
+  })
+  .then(
+    result => response.redirect('/'),
+    err => console.error(err)
+  )
 })
