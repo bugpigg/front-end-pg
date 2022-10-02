@@ -189,3 +189,5 @@ app.post('/register', function(request, response){
     err => console.error(err)
   )
 })
+
+app.use('/shop', require('./routes/shop'))
