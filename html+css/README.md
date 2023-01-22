@@ -263,3 +263,97 @@
         - 덩어리이름__역할--세부특징
 
 </details>
+
+<details>
+<summary> 중급모듈 - 2023.01.23</summary>
+
+- 폰트 넣는 법
+    - 컴마를 활용해 여러개 지정할 수 있음
+    - 커스텀 폰트 넣는 법
+        ```css
+        @font-face {
+        font-family : '이쁜폰트';
+        src : url(nanumsquare.ttf)
+        }
+        ```
+    - 한글폰트 사이즈는 크기가 큼...
+        - 1, 2개만 쓰자
+    - 용량 줄이기 위해서는 woff 파일을 쓰자.
+    - 폰트 부드럽게 처리하려면??
+        ```css
+            transform : rotate(0.04deg); 
+        ```
+
+- 박스 가로로 배치하는 또 다른 방법!!
+    - FlexBox
+        ```
+            display: flex;
+            <!-- 가운데 정렬 -->
+            justify-content: center;
+            <!-- 세로로 배치하고 싶다면 -->
+            flex-direction: column;
+            <!-- width 크면 밑으로 보내고 싶다면?? -->
+            flex-wrap: wrap;
+            <!-- 상하정렬을 하고 싶다면?? -->
+            align-items: center;
+            <!-- 박스 크기를 비율로 설정가능 -->
+            flex-grow: 2;
+        ```
+
+- vscode의 플러그인을 활용하여 코딩하자
+    - lorem 해주면 임시 글자 무작위 생성
+    - Emmet을 적극 활용하자!
+
+- head 태그에 들어갈 수 있는 내용 정리
+    - 각종 css 파일들
+    - 스타일 태그
+    - 여러가지 메타 태그
+        - 인코딩 형식, 검색결과 화면 글귀 수정, zoom 레벨이나 초기 폭 지정
+        ```
+            <meta charset="UTF-8">
+            <meta name="description" content="html 잘하는 코딩애플입니다.">
+            <meta name="keywords" content="HTML,CSS,JavaScript,자바스크립트,코딩">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        ```
+    - open graph
+        - 링크 공유시 박스가 뜨고, 설명 제목 이미지 띄워주는거 커스터마이징
+        ```
+            <meta property="og:image" content="/이미지경로.jpg">
+            <meta property="og:description" content="사이트설명">
+            <meta property="og:title" content="사이트제목">
+        ```
+    - favicon
+
+- 반응형 레이아웃 만들기
+    - 화면 사이즈가 작으면 스타일을 변경해 주세요!
+    - vw = view port width
+        - 브라우저 폭에 비례
+    - vh = view port height
+    - rem = 기본 폰트 사이즈에 비례
+        - 기본 폰트 사이즈는 16px
+        - 모든 곳을 rem으로 크기 지정하면, 기본 font-size커져도 모든게 같이 커짐
+        - 그런데 요즘은 안씀...
+    - em = 내 폰트사이즈에 비례
+    - 반응형 사이트 만들려면 이거 복붙
+        ```html
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        ```
+    - media query 문법 사용하기
+        - css 파일 맨 밑에 적기, 여러개 넣을 수 있음
+        ```css
+        @media screen and (max-width : 1200px) { 
+        .box { 
+            font-size : 40px; 
+        } 
+        } 
+
+        @media screen and (max-width : 768px) { 
+        .box { 
+            font-size : 30px; 
+        } 
+        }
+        ```
+        - break point는 다른 사람꺼 따라하자.
+
+
+</details>
