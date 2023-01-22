@@ -55,7 +55,7 @@
     - padding 상하좌우 안쪽 여백
     - border 테두리
     - border-radius 테두리 둥글게
-    - 기본적으로 display: block 가지고 있음
+    - 기본적으로 `display: block` 가지고 있음
         - 가로행을 전부 차지해주셈
         - p,h tag 도 가지고 있음
 
@@ -68,12 +68,12 @@
     - div는 float를 통해 정렬 가능
         - 가로로 배치 하는 방법 중 하나임
         - 얘는 붕 떠있는 존재임
-        - 그래서 float 다음에 오는 요소에게 영향을 줌
+        - 그래서 float이지만 다음에 오는 요소에게 영향을 줌
         - `clear: both;`를 사용하여 해결
     - `display: inline-block;`
         - 가로로 배치하는 또 다른 방법
         - 내 크기 만큼 차지하게 해주세요 라는 의미임
-        - 근데 이거는 박스사이 공백제거를 해줘야 함...
+        - 근데 이거는 박스사이 공백제거하고 붙여서 써줘야 함...
             - 그래서 박스사이에 주석을 넣거나
             - font-size를 0으로 설정할 수 있음
         - 그리고 박스 안에 글자 쓰면 깨짐
@@ -81,7 +81,185 @@
                 - 위 속성은 inline 속성을 가지는 요소에만 적용 가능
                 - 발생하는 이유는 inline-block요소는 옆에 baseline이 존재하면 위로 이동하려는 습성? 이 있음..
 
+- float 관련 문제
+    - 바로 위의 요소가 float인 경우, 새로 만드는 요소에 margin이 제대로 적용되지 않을 수 있음
+    - 그 경우에는 
+        - 1. margin을 많이 주거나
+        - 2. 빈 div 만들어서 거기다가 `clear: both`을 주고, 다음 줄에 새로운 요소 입력하자
+    - 그래서 float요소 준 다음에는 `clear: both`를 넣은 가상의 박스를 추가해 주자.
 
+- `<nav>`태그는 div 태그랑 동일하지만 네비게이션 바라는 의미를 줌
+    - `<section>`, `<footer>` 태그도 있음, 이것도 div와 동일
 
+- 설렉터 문법
+    - 공백은 `~안에 있는` 이라는 뜻
+        - `.navbar li {...}` navbar 클래스의 모든 자식
+    - `>`는 `~안에 있는 직계자식` 이라는 뜻
+    - 위의 문법을 자주 사용하는 것 보다는 코드의 의도가 바로 파악되는게 읽기 좋음
+
+- a태그 관련
+    - 밑줄 없애기 `text-decoration: none;`
+
+- 백그라운드 이미지 
+    ```
+    <!-- div 에 그림 꽉 채우기, contain도 있는데 이거는 안 짤리게 함 -->
+    background-size : cover; 
+    background-repeat : no-repeat;
+    <!-- 어디서 부터 배경을 채우는가 -->
+    background-position : center;
+    <!-- 스크롤시 배경 고정 -->
+    background-attachment : fixed;
+    <!-- 보정도 가능하다 -->
+    filter: brightness() ;
+    ```
+    - 배경 2개 겹치기 가능
+        - 콤마로 이미지 2개 첨부하면 댐
+    - margin collapse 현상
+        - 네모박스 2개 만들면, 마진이 1개로 합쳐짐
+        - 위 현상이 싫다면, 테두리 띄어 놓으면 된다!
+
+- body에 기본 margin이 있음
+    - 그래서 맨 위에 이렇게 설정해놓으면 좋긴 함
+        ```
+        body {
+            margin: 0px;
+        }
+        ```
+
+- position
+    - 포지션 부여하면 좌표이동가능
+        ```
+        <!-- 내 원래 위치를 기준으로 이동할 때 -->
+        position: relative;
+        top: 100px;
+        left: 100px;
+        ```
+    - 포지션 부여하면 공중에 뜸
+    - 여러 속성
+        - static 좌표이동x
+        - fixed 현재화면이 기준
+            - 화면에 달라붙는 요소를 구현할 수 있음
+        - absolute 내 부모 태그가 기준!
+            - 정확히는 내 부모 태그 중 position: relative 가진 부모가 기준!!
+            - 가운데 정렬하려면??
+                ```
+                left: 0;
+                right: 0;
+                margin: auto;
+                width: 150px;
+                ```
+
+- z index
+    - 공중에 떠 있는 애들이 많다면??
+        - 이 인덱스가 높을수록 앞으로 온다!!
+
+- 반응형 width
+    - 브라우저 현재창의 width === `<body>` 의 width
+    - 반응형 웹페이지 만들고 싶으면 퍼센트 사용하자!
+        - 그치만 이거의 문제점은 pc에서 너무 큼
+            - 그래서 max-width를 사용하자!
+            - 최대폭을 지정하여 이거보다 더 커지지 않는다!!!
+    - 주의할 점은 width는 눈에 보이는 박스 크기가 아니라 content 영역의 너비이다!
+        - 이를 해결하기 위해서는 `box-sizing: border-box` 활용하잘
+        - 이러면 width가 padding, border 포함함
+        - 그래서 이렇게 설정하면 편하긴 함
+            ```css
+            div {
+                box-sizing: border-box;
+            }
+            ```
+
+- 참고로 브라우저 마다 디자인 모양이 다를 수 있음
+    - normalize.css  이런거 찾아보셈
+
+- 폼, 인풋 태그
+    -  `<form>`
+        - 작성한 내용이 어떤 서버경로로 전달될지
+    - `<input>`
+        - 입력할 타입 지정 가능
+        - 타입에는 date, password, email, checkbox, radio
+        - value를 붙이면, 기본적으로 채워질 값 설정 가능
+        - name으로 인풋이름 지정 가능, 서버개발시 필요
+        - 설렉트 박스도 만들 수 있음
+            ```
+            <select>
+                <option></option>
+            </select>
+            ```
+        - textarea 도 있음
+        - input 전송버튼도 만들 수 있음
+            ```css
+            <button type="submit">전송</button>
+            <input type="submit">
+            ```
+        - `input[type=email]`으로 특정 속성값을 가지는 경우를 선택 가능
+
+- 설렉터에서 콤마쓰면 중복선택가능
+    ```css
+    div, input, textarea {
+        box-sizing: border-box;
+    }
+    ```
+
+- label 태그
+    - for 속성 부여 가능
+    - 아래와 같이 사용
+        ```css
+        <input type="checkbox" id="subscribe">
+        <label for="subscribe">누르기</label>
+        ```
+        라벨을 누르면 인풋 누른것과 동일하게 동작
+    
+- 테이블 만들기
+    - tr은 row, td는 column을 의미
+    - 제목행은 thead에 넣고, 일반행은 tbody에 넣자!
+    - 테이블의 기본적으로 존재하는 틈을 없애기 위해서는, `border-collapse: collapse;`를 주자
+    - 셀 안의 요소 간의 세로 정렬 -> vertical-align
+        - super: 위첨자
+        - sub: 아래첨자
+        - 근데 테이블안에서는 top, middle, bottom 만 가능!
+    - `display: inline` 의 경우는 항상 옆으로 채워지는 폭과 너비가 없는 요소
+        - span 같은 것들
+    - 일반 div로 테이블 만들기
+        - `<div style="display: table">`
+
+- n-th child selector
+    - n번째 나오는 요소만 선택
+    ```
+    .cart-table td:nth-child(2) {
+        color: red;
+    } 
+    ```
+    - 짝수, 홀수 선택 가능
+        - even, odd
+    - 3의 배수 선택
+        - 3n+0
+
+- td 하나로 합치기
+    - `colspan="5"` td 5개 합칠 수 있음
+
+- 인터랙티브 버튼 만들기
+    - `cursor: pointer;` css에 추가하기 -> 커서 바뀜
+    - pseudo-class 설렉터
+        - `.btn:hover {...}` 마우스 올려놓은 경우
+        - `.btn:active {...}` 클릭 중 스타일 
+        - `.btn:focus {...}` 
+        - a태그에도 사용가능
+            ```
+            a:link { 
+                color : red; /*방문 전 링크*/ 
+            } 
+            a:visited { 
+                color : black; /*방문 후 링크*/ 
+            } 
+            ```
+
+- 코드양이 줄어드는 class 작명법
+    - 뼈대용 class, 살점용 class 각각 제작
+        - 이를 OOCSS -> Object Oriented CSS
+        - utility 클래스에서 주로 사용함
+    - 클래스 작명할때 창의력이 딸리다면??
+        - BEM 룰 -> Block Element Modifier
+        - 덩어리이름__역할--세부특징
 
 </details>
