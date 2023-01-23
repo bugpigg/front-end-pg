@@ -355,5 +355,44 @@
         ```
         - break point는 다른 사람꺼 따라하자.
 
+- 폰트 어썸을 이용하여 아이콘 넣기
+    - cdn, 혹은 직접 다운로드하여 사용하기
+    - 예제 아이콘 꾸미기
+        ```css
+            .product-container i {
+                background-color: burlywood;
+                width: 100px;
+                heigth: 100px;
+                border-radius: 50px;
+                padding-top 25px;
+                box-sizing: border-box;
+                color: white;
+            }
+        ```
+
+- 애니메이션 만드는 법칙
+    1. 시작스타일 만들기
+    2. 최종 스타일 만들기
+    3. 언제 최종스타일로 변하는지
+    4. transition으로 애니메이션 주기
+        ```
+        .overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            <!-- 위의 스타일이 변하면 1초에 걸쳐 변하게 하셈 -->
+            transition: opacity 1s;
+        }
+        .overlay:hover {
+            opacity: 1;
+        }
+        ```
+- 이미지 위에 오버레이 씌울때 오버레이가 아래 부분에서 더 긴 경우가 있음
+    - 그때 이미지에 display: block 속성 주면 고쳐짐
+
+- overflow: hiddne; 속성으로 넘치는 요소 안 보이게 설정하기!
+
 
 </details>
