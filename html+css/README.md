@@ -394,5 +394,33 @@
 
 - overflow: hiddne; 속성으로 넘치는 요소 안 보이게 설정하기!
 
+- bootstrp 쓰는 이유 
+    - 개발 시간 단축 
+    - 설치하는 법
+        - bootstrap.min.css
+        - boostrap.bundle.min.js
+    - utility 클래스도 제공
+    - 레이아웃 잡기도 쉬움
+        - 한 row 는 12개 col로 이루어짐
+            - col-6, col-6
+            - col-3, col-3, col-3, col-3
+        - 그리드를 통해 반응형 구현 가능함!
+            - xl, lg, md, sm 등등
+            - col-lg-6 -> lg 이상에서만 6을 적용해주세요!
+        - media query 없이도 구현 가능!
+        - order 기능도 있음
+            - 그래서 조건마다 컬럼의 위치를 바꿀 수 있다!
+        
+- CSS 덮어쓰기 하는 법
+    - 같은 클래스명으로 더 밑에 작성하면 끝!
+        - 더 밑에 있는 거를 적용해줌
+    - 우선 순위 높이기
+        - tag > id > class
+        - !important 붙은 거는 무조건적으로 적용된다!
+        - 이거는 비추
+    - specificity 점수 높이기
+        - 구체적으로 정의할 수록 점수가 높아져, 우선적으로 적용됨!
+        - 설렉터를 복잡하게 쓸수록, 미래에 덮어쓰기 힘들어짐...
+
 
 </details>
