@@ -424,3 +424,298 @@
 
 
 </details>
+
+<details>
+<summary> 고급모듈 - 2023.01.24</summary>
+
+- pseudo-element
+    - pseudo-class
+        - 특정요소가 **다른 상태**일때 스타일 줄 수 있게 도와줌
+            `.main-button:hover`
+    - **내 안의 특정 부분**만 스타일을 주고 싶다...
+        - 첫 글자만 크게 넣고 싶다
+            `.pseudo::fist-letter`
+        - 첫 라인
+            `.pseudo::first-line`
+        - 내부 맨뒤나 맨앞에 추가할 때
+            ```
+            .pseudo::after {
+                content: 'hihi'
+            }
+            ```
+        - float의 경우 뒤에 추가해야하는 것을 아래와 같이 대체 가능
+            ```
+            .product-container::after {
+                content: '';
+                display: block;
+                clear: both;
+            }
+            ```
+        - 일부 요소 스타일링 시 활용 가능 -> 숨겨진 요소 스타일링 할때
+            ```html
+           <input type="file" class="input-file"> 
+            ```
+            ```css
+            .input-file::file-selector-button {
+                background: skyblue;
+                border: none;
+                padding: 20px;
+            }
+            .input-file::file-selector-button:hover {
+                background: blue;
+            }
+            ```
+
+- shadow DOM
+    - 숨겨진 요소들
+    ```css
+        input[type=file]:: ??? { ... }
+    ```
+
+- webkit    
+    - 이라는 수식어는 크롬, 사파리, 엣지에만 적용되는 스타일
+
+
+- 브라우저 기본 css -> user agent stylesheet
+    - 여기서 css 요소 훔쳐와서 사용 가능
+    - 그런데 appearance: none; 으로 설정해야 기본값 말고 내가 수정한 값을 보여줄 수 있음
+
+- SASS
+    - CSS 대용 언어
+    - 프로그래밍스러운 문법 존재함
+    - 웹 브라우저는 .css만 읽을 수 있음
+        - .scss 그런거 모름
+        - css로 변환해야 사용 가능 -> 컴파일이 필요함
+    - .map 파일은 크롬 개발자도구 디버깅용
+        -  css가 아니라 scss에서 디버깅하기 위해 사용
+    - .scss vs .sass
+        - sass 파일은 기존 문법 사용가능한데, 괄호 안써도 댐
+    - 유용한 점
+        - 변수
+            - 달러기호를 통해 변수 지정 가능
+            - 근데 사실 css에서도 변수 기능 있음
+                ```css
+                :root {
+                    --main-color: red;
+                }
+                <!-- 변수 사용하려면 -->
+                var(--main-color)
+                <!-- 사칙연산도 가능 -->
+                calc(40px - 20px)
+                ```
+            - 하지만 scss 쓰는게 더 편해 보임...
+        - nesting
+            ```scss
+            .main-bg {
+                h4 {
+
+                }
+                button {
+
+                }
+            }
+            ```
+        - @extend
+            - 클래스를 복사할 때 씀
+            ```scss
+            <!-- % 는 임시클래스임을 명시 -->
+            %btn {
+                width: 100px;
+                height: 100px;
+            }
+            .btn-green {
+                @extend %btn;
+                color: green;
+            }
+            ```
+            - 임시 클래스는 단독으로 컴파일되지 않음!
+        - @mixin
+            - 함수라는 문법
+            ```scss
+                @mixin font-style($font-size, $key, $value) {
+                    font-size: $font-size;
+                    #{ $key }: $value;
+                }
+                h2 {
+                    @include font-style(20px, letter-spacing, -1px)
+                }
+            ```
+            - 다른 파일에 있는 내용 가져오고 싶을때는??
+                - `@use 'reset.scss'`
+                - 확장자 생략 가능
+            - 다른 파일의 변수명을 사용하고 싶으면??
+                - `파일명.$변수`
+            
+        - scss파일에서 컴파일 하기 싫은 파일은??
+            - "_reset.scss" 와 같이 작명하자.
+
+- 동영상 넣기
+    ```html
+    <video controls>
+        <source src="../bridge.mp4" type="video/mp4">
+        <source src="../bridge.mp4" type="video/mp4">
+    </video>
+    ```
+    - 위와 같이 넣게 되면 호환성을 챙길 수 있음
+        - 위에거 틀어보시고, 안되면 밑에거 틀어보세요~
+    - 자동재생은?
+        - `<video controls autoplay muted>`
+    - 먼저 다운받을지? 안받을지
+        - `<video preload="auto">`
+        - none 미리다운 안함
+        - auto 미리다운
+        - metadata 미리다운 적당히
+    - 썸네일
+        - `<video controls poster="a.jpg">`
+    - 무한반복 재생
+        - loop 속성 주기
+
+- 비디오를 배경으로 넣고 싶다면??
+    - 다음처럼 넣으면 된다.
+        ```html
+        <div class="video-box">
+        <video class="video-container" autoplay muted loop>
+            <source src="img/bridge.mp4" type="video/mp4">
+        </video>
+        <h3 class="video-title">Buy Our Shoes!</h3>
+        </div>
+        ```
+        ```css
+        .video-box {
+        height: 500px;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        }
+
+        .video-container {
+        position: absolute;
+        width : 100%;
+        top: 50%;
+        left: 50%;
+        transform : translate(-50%,-50%);
+        z-index: 0;
+        }
+        ```
+
+- 오디오 넣기
+    - <audio src="" controls></audio>
+    - muted
+    - autoplay
+        - 자동재생인데 안댐
+    - preload
+        - 얼마나 로드해놓을건지?
+
+- transform 속성
+    - 쓰면 좋은 이유
+        - 성능 좋음
+            - 그리고 transform 이런거는 다른 쓰레드에서 처리해줌
+
+    - 회전
+        - transform: rotate(360deg)
+    - 좌표이동
+        - transform: translateX(100px) 
+    - 크기
+        - transform: scale(0.5)
+
+- 복잡한 애니메이션 정의
+    - @keyframe
+        ```
+        .anti-text:hover {
+            animation-name: 왔다리갔다리;
+            animation-duration: 1s;
+            <!-- 애니메이션 끝나도 현상 유지하려면 -->
+            animation-fill-mode: forwards;
+        }
+        @keyframes 왔다리갔다리 {
+            0% {
+                transform: trnaslateX(0px);
+            }
+            50% {
+                transform: trnaslateX(-100px);
+            }
+            100% {
+                transform: trnaslateX(100px);
+            }
+        }
+        ```
+
+- 브라우저가 그림그리는 순서
+    1. render tree 만들기
+        - css 정리한 참고자료임
+    2. layout잡기
+        - width, height, margin, padding
+    3. paint하기
+        - background color
+    4. composite 처리
+        - transform, opacity
+    - 그렇기에 만약 transform이 아니라 margin으로 애니메이션 구현하면, 다시 해야하는 단계가 많음
+    - 그리고 composite 처리는 다른 쓰레드에서 해줌
+
+- 성능 잡는 또 다른 방법
+    - will-change 속성
+        - 바뀔 내용을 미리 렌더링 해주는 속성
+    - 하드웨어 가속
+        - translate3D(0, 0, 0)
+        - GPU의 도움을 받음
+
+- Grid 레이아웃
+    - 모눈종이 같은 느낌
+    - 엣지 브라우저 이상에서만 사용 가능
+    - 아래와 같이 사용
+        - 부모 div에 grid 주면 자식들은 모눈종이가 된다...
+        ```css
+        .grid-container {
+            display: grid;
+            <!-- 세로칸 3개 -->
+            grid-template-columns: 100px 100px 100px;
+            <!-- 가로칸 2개 -->
+            grid-template-rows: 100px 100px;
+            <!-- 격자 간격 -->
+            grid-gap: 1px;
+        }
+        ```
+        - fr 단위로 폭지정 가능
+            - 배수로 이해하면 댐
+            - 전체폭에 대해서 배수로 보면 댐
+
+        - 레이아웃 설정1
+            ```css
+            .grid-nav {
+                <!-- grid자식들에게만 사용 가능, 1부터 4까지 차지하게 해주세여 -->
+                grid-column: 1 / 4;
+                grid-row: 1 / 3;
+            }
+            ```
+
+        - 레이아웃 설정2
+            ```css
+            .grid-container {
+                grid-template-areas:
+                    "헤더 헤더 헤더 헤더"
+                    "사이드 . . ."
+                    "사이드 . . ."
+            }
+            .grid-nav {
+                grid-area: 헤더;
+            }
+            .grid-side {
+                grid-area: 사이드;
+            }
+            ```
+        - 테트리스 안댐!
+            - 사각형이여야 함
+        
+- postion: sticky
+    - 화면에 고정
+    - fixed 와 유사하지만
+        - 특정 조건에서만 고정된다!
+        - 조건부로 부모박스를 넘어가면 해제된다!
+    
+- css 3D animation
+    - 겹치게 하기 위해서는 positon: absolute
+    - 진짜 3d 처럼 동작하게 하기 위해
+        - `transform-style: preserve-3d;`
+    - 뒷면 안보이게 설정하기
+        - `backface-visibility: hidden;`
+</details>
