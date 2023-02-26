@@ -58,3 +58,96 @@
         - 그리고 둘 다 중괄호가 함수의 범위이다. var은 함수내부인거에비해 좁은 범위
 
 </details>
+
+<details>
+<summary> level2 - 2023.02.26</summary>
+
+- 몇초 후에 뭔가를 실행하고 싶다면??
+    - setTimeout()
+- 몇초마다 뭔가를 실행하고 싶다면??
+    - setInterval()
+- 자바스크립트문법 vs 브라우저사용법
+
+- includes() 로 문자 검사
+    - 간단한 것만 검사 가능
+    - 그래서 정규식을 사용하자
+        ```
+        /a/.test('abscd')
+        /[a-z]/.test('abscd')
+        /[ㄱ-ㅎ가-힣]/.test('abscd')
+        /^a$d/.test('abscd')
+        /\S+@\S+\.\S+/.test('abscd')
+        ```
+
+- 캐러셀 만들기
+    - 브라우저 폭은 100vw
+
+- 함수 return 문
+    - 소수점반올림하기
+        - 숫자.toFixed(몇자리)
+        - 근데 이거 쓰면 문자가 댐
+
+- 스크롤 이벤트
+    ```
+        window.addEventListener('scroll', function() {
+            window.scrollY
+            window.pageYOffset
+            window.scrollTo(x,y)
+            window.scrollBy(x,y)
+            $(window).on('scroll', function() {
+                $(window).scrollTop()
+            })
+        })
+    ```
+    - 모든 html은 document안에 있고, document는 window 안에 있다.
+    - 스크롤이벤트 리스너의 경우 1초에 60번 정도 체크하므로 부담이 됨
+    - 바닥체크도 여러번 중복으로 해줄듯
+
+- 탭기능 만들기 
+    ```
+        $('.tab-button').eq(0).on('click', function() {
+            $('.tab-button').removeClass('orange');
+            $('.tab-button').eq(0).addClass('orange');
+            $('.tab-content').removeClass('show');
+            $('.tab-content').eq(0).addClass('show');
+        })
+    ```
+    - 좋은관습
+        - 설렉터는 시간이 꽤 걸리니, 변수에 넣어쓰자
+    - for 반복문 써서 코드 중복 줄이자.
+        ```
+        for(let i=0;i<3;i++) {
+            코드
+        }
+        ```
+
+- 이벤트 버블링
+    - 모든 브라우저는 이벤트 버블링이 일어남
+    - 이벤트가 상위 html로 퍼지는 현상
+    - 이를 해결하기 위해서는 이벤트 관련 함수를 활용해야함
+        ```js
+        ~~.addEventListener('click', function(e) {
+            e.target // 유저가 실제로 누른거
+            e.currentTarget // 이벤트리스너 달린 곳
+            this // 이벤트리스너 달린 곳
+            e.preventDefault() // 기본동작 막아줌
+            e.stopPropagation() // 이벤트버블링 막아줌
+        })
+        ```
+
+- 이벤트버블링 응용 -> 이벤트 리스너를 줄이자
+    - 하나를 쓸때마다 램용량을 차지함...
+    - html 태그에 몰래 정보숨기기 가능
+        `data-자료이름="값"`
+    - 출력하기 위해서는
+        `설렉터.dataset.자료이름`
+
+- 좋은 라이브러리들
+    - Swiper
+    - chart.js
+    - animation od scroll
+    - email.js
+    - lodash
+    - fullpage.js
+
+</details>
