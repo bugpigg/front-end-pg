@@ -151,3 +151,15 @@
     - fullpage.js
 
 </details>
+
+
+<details>
+<summary> level1 - 2023.02.12</summary>
+
+- Array, Object 자료형
+
+- 문자 중간에 변수 넣으려면, 백틱을 이용해라!
+    - ${} 사용해서 변수도 사용 가능
+    - 엔터도 사용 가능
+
+</details>
